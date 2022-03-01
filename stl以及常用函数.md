@@ -41,6 +41,20 @@ tolower(c)　　// 转换为小写字母， 当本身为小写字母时，原样
 toupper(c)　　// 转换为大写字母， 当本身为大写字母时，原样输出
 ```
 
+```c++
+//反转字符串
+string x;
+string x_rev(x.rbegin(), x.rend());
+
+//处理字符串，保留数字，字母
+string x;
+for (char ch: s) {
+    if (isalnum(ch)) {
+        x += tolower(ch);
+    }
+}
+```
+
 
 
 # STL
