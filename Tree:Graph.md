@@ -1,8 +1,35 @@
 # 树/图的存储方式
 
-## 1.
+树是一种特殊的图，无环连通图
 
-## 2.
+图：有向图、无向图，无向图是特殊的有向图。
+
+## 1.邻接矩阵
+
+```c++
+g[N][N]
+g[a][b]存储a-->b,有重边保留一个
+比较浪费空间
+```
+
+## 2.邻接表
+
+```c++
+n个node开n个单链表，相当于拉链法hash的存储方式
+int h[N],e[N],ne[N],idx;
+void init(){
+  idx=0;
+  memset(h,-1,sizeof(h));
+}
+//在a开头的单链表中插入b
+void add(int a,int b){
+  e[idx]=b;
+  ne[idx]=h[a];
+  h[a]=idx++;
+}
+```
+
+
 
 # Dijkstra
 
