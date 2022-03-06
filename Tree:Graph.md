@@ -22,10 +22,63 @@ void init(){
   memset(h,-1,sizeof(h));
 }
 //在a开头的单链表中插入b
+//头插法
 void add(int a,int b){
   e[idx]=b;
   ne[idx]=h[a];
   h[a]=idx++;
+}
+```
+
+
+
+# 拓扑排序
+
+有向无环图->拓扑图
+
+1.统计入度出度
+
+2.入度为0的点作为起点
+
+3.每次去掉入度为0的点以及边，不断迭代，直到去掉所有点
+
+```c++
+#include<iostream>
+#include<queue>
+#include<vector>
+using namespace std;
+int n,m;
+vector<int> ans;
+vector<vector<int>> outdegree(100010,vector<int>());
+vector<int> indegree(100010,0);
+int main(){
+    cin>>n>>m;
+    outdegree.resize(n);
+    indegree.resize(n);
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        indegree[b]++;
+        outdegree[a].push_back(b);
+    }
+    queue<int> q;
+    for(int i=1;i<=n;i++){
+        if(indegree[i]==0) q.push(i);
+    }
+    while(!q.empty()){
+        int node=q.front();
+        ans.push_back(node);
+        q.pop();
+        for(auto& v:outdegree[node]){
+            indegree[v]--;
+            if(indegree[v]==0) q.push(v);
+        }
+    }
+    if(ans.size()==n){
+        for(int i=0;i<(int)ans.size();i++) cout<<ans[i]<<" ";
+    }
+    else cout<<-1;
+    return 0;
 }
 ```
 
