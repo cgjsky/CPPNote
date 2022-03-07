@@ -89,7 +89,7 @@ int main(){
 ## 朴素Dijkstra
 
 ```c++
-//采用邻接表储存
+//采用邻接矩阵储存
 int g[N][N],dist[N];
 bool st[N];
 int Dijkstra(){
@@ -116,5 +116,61 @@ int Dijkstra(){
 
 ```c++
 //用邻接表储存
+```
+
+# 最小生成树
+
+## prim算法
+
+思想类似于Dijkstra，从一个空集开始，每次加入结点，然后更新距离，每次都要加入两个集合V S-V的最小权重的边连接的结点。
+
+1.初始化dist，st，g数组，dist数组无穷大，表示各个点到连通部分的距离，不断更新，st代表结点是否已经被选择过
+
+2.选中权重最小的结点，更新距离，加入V，直到所有结点都加入
+
+```c++
+#include<iostream>
+#include<cstring>
+using namespace std;
+const int N=510;
+int g[N][N],dist[N],n,m;
+bool st[N];
+int prim(){
+	memset(dist,0x3f,sizeof(dist));
+	int res=0;
+	for(int i=0;i<n;i++){
+  		int t=-1;
+  		for(int j=1;j<=n;j++){
+    	  	if(!st[j]&&(t==-1||dist[t]>dist[j])){
+          		t=j;
+       		}
+    	}
+  		if(i&&dist[t]==0x3f3f3f3f) return 0x3f3f3f3f;
+  		if(i) res+=dist[t];
+  		st[t]=true;
+  		for(int j=1;j<=n;j++){
+      		dist[j]=min(dist[j],g[t][j]);
+    	}
+	}
+    return res;
+}
+int main(){
+    cin>>n>>m;
+    int u,v,w;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(i==j) g[i][j]=0;
+            else g[i][j]=0x3f3f3f3f;
+        }
+    }
+    while(m--){
+        cin>>u>>v>>w;
+        g[u][v]=g[v][u]=min(g[v][u],w);
+    }
+    int ans=prim();
+    if(ans==0x3f3f3f3f) cout<<"impossible"<<endl;
+    else cout<<ans;
+    return 0;
+}
 ```
 
