@@ -1,3 +1,5 @@
+涉及到图的问题，思考入度、出度、DFS、BFS、拓扑
+
 # 树/图的存储方式
 
 树是一种特殊的图，无环连通图
@@ -80,6 +82,17 @@ int main(){
     else cout<<-1;
     return 0;
 }
+```
+
+
+
+拓扑排序也是可以找出有环图中所有在环里的点，就是在建图时，建立反图
+
+```c++
+//建立原图
+outdegree[a].push_back(b);
+//建立反图
+outdegree[b].push_back(a);
 ```
 
 
@@ -174,3 +187,4 @@ int main(){
 }
 ```
 
+![img](https://fc.dianhsu.top/lc?user=cloneyate&loc=cn&req=rating)

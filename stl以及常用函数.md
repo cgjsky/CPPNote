@@ -1,3 +1,33 @@
+# 输入输出
+
+```c++
+//cin.tie(0);
+//输出建议不要cout<<endl;而是直接在原cout里加"\n";
+```
+
+# 取整
+
+```c++
+//向上取整：
+（x+k-1）/k
+//向下取整
+x/k
+```
+
+
+
+# memset
+
+```c++
+//只能memset一些特殊值
+memset(a,0,sizeof a);
+memset(a,0x3f,sizeof a);
+memset(a,-1,sizeof a);
+memset 1会变成16843009
+```
+
+
+
 # 万能头文件
 
 ```c++
@@ -47,6 +77,11 @@ issupper(c)　　// 当为大写字母时为真
 isspace(c)　　// 当为空格时为真
 tolower(c)　　// 转换为小写字母， 当本身为小写字母时，原样输出
 toupper(c)　　// 转换为大写字母， 当本身为大写字母时，原样输出
+
+string vowels = "aeiouAEIOU";
+vowels.find(x)!=-1 //判断是否是原音
+
+s.insert(s.size(), i + 1, 'a')//在s后面加i+1个a
 ```
 
 ```c++
@@ -177,5 +212,23 @@ bitset, 圧位
     reset()  把所有位变成0
     flip()  等价于~
     flip(k) 把第k位取反
+```
+
+# 字符串提取单词
+
+```c++
+//对于字符串，带有空格，提取字符串中的每个单词到string数组中，之后再进行处理
+s+=" ";//首先加上" "来对最后一个字母进行特殊处理
+vector<string> ans;
+string tmp="";
+for(auto& ch:s){
+  if(ch==' '){
+    if(!tmp.empty()){
+      ans.push_back(tmp);
+      tmp.clear();
+    }
+  }
+  else tmp+=ch;
+}
 ```
 
