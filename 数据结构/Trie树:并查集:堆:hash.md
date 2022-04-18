@@ -58,6 +58,53 @@ int main(){
 每个结点存储它的父结点，p[x]表示x的父结点
 
 ```c++
+//模版
+class UnionFind{
+public:
+    vector<int> parent;
+    vector<int> size;
+    int n;
+    int setCount;
+public:
+    UnionFind(int num){//num表示元素的个数
+        for(int i = 0; i < num; i++){
+            parent.push_back(i);//箭头指向自己
+        }
+        n=num;
+        setCount=num;
+        for(int i=0;i< num;i++){
+            size.push_back(1);
+        }
+    }
+    int findset(int x) {
+        return parent[x] == x ? x : parent[x] = findset(parent[x]);
+    }
+    bool unite(int x, int y) {
+        x = findset(x);
+        y = findset(y);
+        if (x == y) {
+            return false;
+        }
+        if (size[x] < size[y]) {
+            swap(x, y);
+        }
+        parent[y] = x;
+        size[x] += size[y];
+        --setCount;
+        return true;
+    }
+    
+    bool connected(int x, int y) {
+        x = findset(x);
+        y = findset(y);
+        return x == y;
+    }
+};
+```
+
+
+
+```c++
 //问题1:如果判断树根
 if(p[x]==x)
 //问题2:如何求x的集合编号

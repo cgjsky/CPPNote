@@ -230,3 +230,5 @@ int main(){
 [数字三角形](https://www.acwing.com/problem/content/900/)
 
 [最长上升子序列](https://www.acwing.com/problem/content/description/897/)
+
+[最长公共子序列](https://www.acwing.com/problem/content/899/)

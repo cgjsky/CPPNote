@@ -1,4 +1,174 @@
-涉及到图的问题，思考入度、出度、DFS、BFS、拓扑
+涉及到图的问题，思考
+
+入度、出度、DFS、BFS、拓扑、并查集
+
+# 判断图是否是树
+
+```c++
+//并查集判断，
+树的定义：1.无环 2.连通图
+并查集判断有无环：如果连接的两边父节点相同，有环
+判断是否连通：只有一个节点的根节点是自己，多个则不连通
+int p[2010];
+int find(int x){
+  	if(p[x]!=x) p[x]=find(p[x]);
+  	return p[x];
+}
+bool uni(int a,int b){
+  	int pa=find(a);
+  	int pb=find(b);
+  	if(pa==pb) return false;
+  	else p[pa]=pb;
+  	return true;
+}
+bool validTree(int n,vector<vector<int>>& edges){
+  	if(edges.size()!=n-1) return false;
+  	for(int i=0;i<n;i++) p[i]=i;
+  	//判断是否有环
+  	for(auto& e:edges){
+      	if(uni(e[0],e[1])==false) return false;
+    }
+  	//判断是否有一个根节点
+  	int cnt=0;
+  	for(int i=0;i<n;i++){
+      	if(p[i]==i) cnt++;
+    }
+  	return cnt==1;
+}
+```
+
+```c++
+//dfs判断，如果一个点一直dfs可以遍历所有点，则是图
+class Solution {
+public:
+    vector<vector<int>> edge;
+    void dfs(int i,vector<vector<int>>& edge,vector<int>& vis){
+        if(vis[i]) return;
+        vis[i]=1;
+        for(auto& e:edge[i]){
+            dfs(e,edge,vis);
+        }
+    }
+    //经典dfs，如果可以一次遍历，就有一个连通块，则是图
+    bool validTree(int n, vector<vector<int>>& edges) {
+        if(edges.size()!=n-1) return false;
+        edge.resize(n);
+        for(auto& e:edges){
+            edge[e[0]].push_back(e[1]);
+            edge[e[1]].push_back(e[0]);
+        }
+        vector<int> vis(n,0);
+        dfs(0,edge,vis);
+        for(int i=0;i<n;i++){
+            if(!vis[i]) return false;
+        }
+        return true;
+    }
+};
+```
+
+```c++
+//bfs
+class Solution {
+public:
+    vector<vector<int>> edge;
+    bool validTree(int n, vector<vector<int>>& edges) {
+        if(n-1!=edges.size()) return false;
+        edge.resize(n);
+        for(auto& e:edges){
+            edge[e[0]].push_back(e[1]);
+            edge[e[1]].push_back(e[0]);
+        }
+        queue<int> q;
+        vector<int> vis(n,0);
+        q.push(0);
+        vis[0]=1;
+        while(!q.empty()){
+            auto node=q.front();
+            q.pop();
+            for(auto& e:edge[node]){
+                if(!vis[e]){
+                    q.push(e);
+                    vis[e]=1;
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(!vis[i]) return false;
+        }
+        return true;
+    }
+};
+```
+
+
+
+# 冗余连接
+
+```c++
+//使用并查集判断
+//无向图
+const int N=1010;
+int p[N];
+int find(int x){	return p[x]==x? x: p[x]=find(p[x]);}
+vector<int> findRedundantConnection(vector<vector<int>>& edges){
+  	int n=edges.size();
+  	for(int i=1;i<=n;i++) p[i]=i;
+  	for(auto& e:edges){
+      	int a=e[0],b=e[1];
+      	if(find(a)==find(b)) return {a,b};
+      	else p[p[a]]=p[b];
+    }
+}
+
+
+
+//有向图
+有向图由于连边具有方向，所以更加复杂，首先，如果加在根节点上，则所有节点入度都是1，存在环，如果不是根节点，那么存在一个节点入度为2，发生冲突。
+因此有三种情况：
+  1.有环无冲突
+  2.有环有冲突，这种情况要返回冲突边的上一个父节点与该点连线
+  3.无环有冲突
+const int N=1010;
+//一个存储父节点，一个存储祖宗节点，初始都是自身
+int ancestor[N],p[N];
+int find(int x){return ancestor[x]==x?x:ancestor[x]=find(ancestor[x]);}
+vector<int> findRedundantDirectedConnection(vector<vector<int>>& edges) {
+  	int n=edges.size();
+  	for(int i=0;i<=n;i++){
+      	p[i]=i;
+      	ancestor[i]=i;
+    }
+  	int conflict=-1,cycle=-1;
+  	for(int i=0;i<n;i++){
+      	int a=edges[i][0],b=edges[i][1];
+      	//b已经存在父节点
+      	if(p[b]!=b) conflict= i;
+      	else{
+          	p[b]=a;
+          	if(find(b)==find(a)) cycle=i;
+          	else ancestor[find(b)]=find(a);
+        }
+    }
+  	if(conflict<0){
+      	auto ans=vector<int> {edges[cycle][0],edges[cycle][1]};
+      	return ans;
+    }
+  	else{
+      	if(cycle>0){
+          	auto c=edges[conflict];
+          	auto ans=vector<int> {p[c[1]],c[1]};
+          	return ans;
+        }
+      	else {
+          	auto ans=vector<int> {edges[conflict][0],edges[conflict][1]};
+          	return ans;
+        }
+    }
+}
+```
+
+
 
 # 树/图的存储方式
 
@@ -187,4 +357,4 @@ int main(){
 }
 ```
 
-![img](https://fc.dianhsu.top/lc?user=cloneyate&loc=cn&req=rating)
+![img](https://fc.dianhsu.top/lc?user=cloneyate&loc=cn&req=rating)[]()
