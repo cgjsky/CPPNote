@@ -3,6 +3,9 @@
 ```c++
 //cin.tie(0);
 //输出建议不要cout<<endl;而是直接在原cout里加"\n";
+//设置cout精度
+#include<iomanip>
+cout<<fixed<<setprecision(n)<<ans<<endl;
 ```
 
 # 取整
@@ -57,6 +60,12 @@ stoi\stol\stoll使用时，将字符串转化为数字类型，但是必须要�
 //int long ll转string
 int x=45;
 string s=to_string(x);//s="45"
+
+//char->string
+char x = 'a';
+string s;s.push_back(x);
+或者
+string s(1,c);
 ```
 
 # 查看数据类型
@@ -230,5 +239,11 @@ for(auto& ch:s){
   }
   else tmp+=ch;
 }
+```
+
+# 深拷贝
+
+```c++
+//涉及深拷贝的一般都需要hashmap，存储原node与新node的映射，如果m中不含node，新建newnode使得m[node] = newnode，之后对于node的连接关系，在newnode上同样复制
 ```
 

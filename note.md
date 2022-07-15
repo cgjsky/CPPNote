@@ -1,30 +1,6 @@
-# 队列与优先队列
+## 
 
-## 队列：前出后进
-
-```c++
-queue <int> q;
-q.push(x);
-q.pop();
-q.size();
-q.empty();
-q.front();//返回第一个元素
-q.back;//返回最后一个元素
-```
-
-
-
-## 优先队列
-
-```c++
-priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
-```
-
-队列里的元素是pair,通过pair.first pair.second来访问pair里的内容
-
-通过make_pair()来让两个int合并成pair并push进队列
-
-## 用两个栈来模拟队列
+# 用两个栈来模拟队列
 
 栈FILO 队列FIFO 所以需要两个栈，一个用来push，一个用来pop以及peek
 

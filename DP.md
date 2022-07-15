@@ -232,3 +232,26 @@ int main(){
 [最长上升子序列](https://www.acwing.com/problem/content/description/897/)
 
 [最长公共子序列](https://www.acwing.com/problem/content/899/)
+
+# 最小硬币数
+
+```c++
+//给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+输入：coins = [1, 2, 5], amount = 11
+输出：3 
+解释：11 = 5 + 5 + 1
+思路：dp[x]代表金额x所需的最小硬币数，dp[0]=0,x=1时，dp[1]=dp[0]+1
+   	 x=2时，dp[2]=dp[1]+1....dp[i]=min(dp[i], dp[i-coins[j]]+1)
+  	 金额i最小是由coins里的每个金额加上前面的合适金额构成的
+  int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1,0x3f3f3f3f);
+        dp[0]=0;
+        for(int i=1;i<=amount;i++){
+            for(int j=0;j<coins.size();j++){
+                if(coins[j]<=i)  dp[i] = min(dp[i], dp[i-coins[j]]+1);
+            }
+        }
+        return dp[amount]==0x3f3f3f3f? -1 :dp[amount];
+    }
+```
+
