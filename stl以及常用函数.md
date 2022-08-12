@@ -247,3 +247,15 @@ for(auto& ch:s){
 //涉及深拷贝的一般都需要hashmap，存储原node与新node的映射，如果m中不含node，新建newnode使得m[node] = newnode，之后对于node的连接关系，在newnode上同样复制
 ```
 
+
+
+# 运算符重载
+
+
+
+```c++
+bool operator <(const 类别& a){
+  	if(...) return 
+    return 
+}
+```

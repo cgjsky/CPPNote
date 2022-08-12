@@ -26,10 +26,51 @@ void dfs(){
 
 
 
+```c++
+回溯的三个常见子问题，分别是子集、组合和排列
+排列：
+P(n,k) 从n个不同元素里面拿k个元素的排列
+C(n,k) 从n个不同元素里面拿k个元素的组合
+排列与组合最根本的差异就是是否考虑顺序的差异
+
+对于排列来说，顺序不同就属于不同的样本，而对于组合和子集，即使顺序不同，它们仍然是一样的答案
+
+对于组合和子集问题，需要首先排除掉因为顺序不同而产生的结果相同的分支，一般可以通过选择路径时的start来排序，在for循环中，每次的起点都是上一次选择的下一个元素，例如我们选择了[1,2]元素，那我们下一个则只能从3开始选择，这样就单向的规定了我们路径选择的顺序
+
+对于排列问题，由于没有顺序的要求，所以我们可以每次都从0开始start，但是要注意，如果我们不能进行重复选择操作，那我们每个元素只能选择一次，也就是说每次的路径选择都会比上一次的少一个枝，这个我们可以每次判断path中是否已经包含当前路径节点或者used数组来进行判断，例如目前path=[1,2,4]，我们从0开始选择路径，发现3不在path中，就可以加入路径，二者的代码根据自己喜好进行
+  
+一般来讲，这三个问题都有三个子问题：
+  1.元素无重，不可复选
+  2.元素无重，可以复选
+  3.元素重复，不可复选
+  
+我们需要做的，就是根据不同的情况进行剪枝
+注意组合问题与子集问题本质上是等价的，所以9种情况其实就是6种
+对于子集/组合 无重不复选 思路一样，通过i=start,dfs(i+1)来保持相对顺序。后者多一个path.size()==nums.size()的判断
+  
+对于排列  无重不复选 仅通过用过不能用来剪枝 i=0,dfs(nums)
+  
+对于子集/组合 有重不复选 nums先sort，然后 if(i>idx && nums[i]==nums[i-1]) continue 来剪枝
+
+对于排列  有重不复选  同样做法，加一个used数组 if(i && nums[i]==nums[i-1] && !used[i])
+  
+对于子集/组合 无重可复选 标准的子集是通过 dfs(i+1,nums)来保证不复选，所以递归换成dfs(i,nums)
+
+对于排列 无重可复选 放飞自我 去掉所有used数组，不需要任何剪枝
+```
+
+```
+总结：首先判断是组合还是排列的问题，如果是组合，路径选择从idx开始，排列从0开始
+之后判断是三种子问题的哪一种，分别进行相应的剪枝
+```
+
+
+
 ## 1.子集
 
 ```c++
 //问题很简单，输入一个不包含重复数字的数组，要求算法输出这些数字的所有子集
+无重复不可复选
 //由于子集是对于每个结点都要选取，所以不需要判断是否path.size()==n；
 1.path,对于每个path，直接加入ans
 2.选择列表，从idx到nums.size()
@@ -55,6 +96,7 @@ public:
 
 ```c++
 //带重复元素
+重复不可复选
 class Solution {
 public:
     vector<vector<int>> ans;
@@ -240,4 +282,39 @@ bool dfs(vector<vector<char>>& board, string& word,int u,int x,int y)
 }
 ```
 
-# 
+# 划分k个相等的子集
+
+```c++
+//从数字的视角来看，一共有k个桶，所以路径选择是k
+//由于每个球都可以放在不同的桶里面去尝试，所以回溯的复杂度是k^n
+//把第idx个球放入第i个球，如果bucket[i]没有超，就继续dfs，否则的话，就回溯回去走其他路径
+class Solution {
+public:
+    bool dfs(vector<int>& nums, int idx, vector<int>& bucket, int k , int target){
+        if(idx == nums.size()) return 1;
+        //路径选择
+        for(int i = 0; i < k; i++){
+            if(i && bucket[i] == bucket[i-1]) continue;
+            if(bucket[i] + nums[idx] > target) continue;
+            bucket[i] += nums[idx];
+            if(dfs(nums,idx+1,bucket,k,target)) return 1;
+            bucket[i] -= nums[idx];
+        }
+        return 0;
+    }
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        //球->桶，idx = 球， 选择 -> 桶， 如果idx == n return
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        reverse(nums.begin(),nums.end());
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        //cout<<sum<<" ";
+        if(k > n) return 0;
+        if(sum%k!=0) return 0;
+        int target = sum/k;
+        vector<int> bucket(n);
+        return dfs(nums, 0, bucket, k, target);
+    }
+};
+```
+
