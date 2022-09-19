@@ -1,7 +1,7 @@
 # 迷宫问题
 
 一定要注意迷宫问题的二维矩阵不一定长宽都是n，可能一个n，一个m，不要再WA了
-a
+
 ```c++
 #include<iostream>
 #include<queue>
